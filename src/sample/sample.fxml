@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <AnchorPane layoutX="-1.0" layoutY="1.0" prefHeight="600.0" prefWidth="301.0" style="-fx-border-color: silver;">
+         <children>
+            <TextField fx:id="text_do_wyslania" layoutX="20.0" layoutY="49.0" prefHeight="36.0" prefWidth="267.0" />
+            <TextField fx:id="bity_do_przeklamania" layoutX="20.0" layoutY="135.0" prefHeight="36.0" prefWidth="267.0" />
+            <Button fx:id="button_sent_text" layoutX="20.0" layoutY="205.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="267.0" text="Wyślij">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Label layoutX="20.0" layoutY="22.0" text="Text do wysłania">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="20.0" layoutY="108.0" text="Bity do przekłamania">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
+      <TabPane layoutX="300.0" prefHeight="585.0" prefWidth="701.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab fx:id="tab_controla" text="Controla parzystości">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="434.0" prefWidth="497.0">
+                     <children>
+                        <Button fx:id="encode_pairity" layoutX="68.0" layoutY="88.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="267.0" text="Koduj" />
+                        <Label layoutX="33.0" layoutY="37.0" text="Dane binarne:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="input_data1" layoutX="179.0" layoutY="29.0" prefHeight="30.0" prefWidth="200.0" />
+                        <Label layoutX="33.0" layoutY="162.0" text="Dane zakodowane:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="coded_par" layoutX="179.0" layoutY="160.0" prefHeight="30.0" prefWidth="200.0" />
+                     </children></AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="tab_hamming" text="Kod Hamminga">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="701.0" />
+               </content>
+            </Tab>
+            <Tab fx:id="tab_crc" text="CRC">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="33.0" layoutY="37.0" text="Dane binarne:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="input_data3" layoutX="179.0" layoutY="29.0" prefHeight="30.0" prefWidth="200.0" />
+                        <ComboBox fx:id="comboBox_metoda" layoutX="87.0" layoutY="86.0" prefHeight="36.0" prefWidth="184.0" />
+                        <Button fx:id="crc_koduj" layoutX="293.0" layoutY="86.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="73.0" text="Koduj" />
+                        <Label layoutX="33.0" layoutY="162.0" text="Dane zakodowane:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="coded_crc" layoutX="179.0" layoutY="160.0" prefHeight="30.0" prefWidth="200.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
