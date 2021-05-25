@@ -93,7 +93,7 @@ public class Controller {
 
                         break;
                     case "CRC16":
-                        coded_crc.setText(Crc.CRC16_USB(bytes)); //poprawnie wylicza sumę kontrolną
+                        coded_crc.setText(Crc.CRC16_USB(bytes)); //poprawnie wylicza sumę kontrolną//
                         break;
                     case "CRC16 REVERSE":
 
