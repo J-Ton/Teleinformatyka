@@ -84,15 +84,19 @@ public class Controller {
         crc_koduj.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                String input;
+                input = text_do_wyslania.getText();
+                byte[] bytes = input.getBytes();
+
                 switch(comboBox_metoda.getValue()){
                     case "CRC12":
-                        String input = text_do_wyslania.getText();
-                        coded_crc.setText(Crc.calculate_crc(input));
+
                         break;
                     case "CRC16":
-                        coded_crc.setText("222");
+                        coded_crc.setText(Crc.CRC16_USB(bytes)); //poprawnie wylicza sumę kontrolną
                         break;
                     case "CRC16 REVERSE":
+
 
                         break;
                     case "CRC32":
@@ -108,7 +112,7 @@ public class Controller {
 
                         break;
                     case "AMT":
-                    System.out.println("1234");
+
                         break;
                 }
 
