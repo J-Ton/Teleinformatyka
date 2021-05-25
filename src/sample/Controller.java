@@ -108,7 +108,7 @@ public class Controller {
 
                         break;
                     case "AMT":
-
+                    System.out.println("1234");
                         break;
                 }
 
