@@ -1,41 +1,206 @@
 package sample;
 
-public class CrcCalc {
-    static String crc16(String input) {
-        int crc = 0xFFFF;
-        byte[] buffer = input.getBytes();
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
-        for (int j = 0; j < buffer.length; j++) {
-            crc = ((crc >>> 8) | (crc << 8)) & 0xffff;
-            crc ^= (buffer[j] & 0xff);//byte to int, trunc sign
-            crc ^= ((crc & 0xff) >> 4);
-            crc ^= (crc << 12) & 0xffff;
-            crc ^= ((crc & 0xFF) << 5) & 0xffff;
-        }
-        crc &= 0xffff;
-        return String.valueOf(crc);
+    public class CrcCalc {
 
-    }
 
-    String calculate_crc(String input) {
-        byte[] bytes = input.getBytes();
+        private int[] crcs = new int[]{
+                0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
+                0x8c48, 0x9dc1, 0xaf5a, 0xbed3, 0xca6c, 0xdbe5, 0xe97e, 0xf8f7,
+                0x1081, 0x0108, 0x3393, 0x221a, 0x56a5, 0x472c, 0x75b7, 0x643e,
+                0x9cc9, 0x8d40, 0xbfdb, 0xae52, 0xdaed, 0xcb64, 0xf9ff, 0xe876,
+                0x2102, 0x308b, 0x0210, 0x1399, 0x6726, 0x76af, 0x4434, 0x55bd,
+                0xad4a, 0xbcc3, 0x8e58, 0x9fd1, 0xeb6e, 0xfae7, 0xc87c, 0xd9f5,
+                0x3183, 0x200a, 0x1291, 0x0318, 0x77a7, 0x662e, 0x54b5, 0x453c,
+                0xbdcb, 0xac42, 0x9ed9, 0x8f50, 0xfbef, 0xea66, 0xd8fd, 0xc974,
+                0x4204, 0x538d, 0x6116, 0x709f, 0x0420, 0x15a9, 0x2732, 0x36bb,
+                0xce4c, 0xdfc5, 0xed5e, 0xfcd7, 0x8868, 0x99e1, 0xab7a, 0xbaf3,
+                0x5285, 0x430c, 0x7197, 0x601e, 0x14a1, 0x0528, 0x37b3, 0x263a,
+                0xdecd, 0xcf44, 0xfddf, 0xec56, 0x98e9, 0x8960, 0xbbfb, 0xaa72,
+                0x6306, 0x728f, 0x4014, 0x519d, 0x2522, 0x34ab, 0x0630, 0x17b9,
+                0xef4e, 0xfec7, 0xcc5c, 0xddd5, 0xa96a, 0xb8e3, 0x8a78, 0x9bf1,
+                0x7387, 0x620e, 0x5095, 0x411c, 0x35a3, 0x242a, 0x16b1, 0x0738,
+                0xffcf, 0xee46, 0xdcdd, 0xcd54, 0xb9eb, 0xa862, 0x9af9, 0x8b70,
+                0x8408, 0x9581, 0xa71a, 0xb693, 0xc22c, 0xd3a5, 0xe13e, 0xf0b7,
+                0x0840, 0x19c9, 0x2b52, 0x3adb, 0x4e64, 0x5fed, 0x6d76, 0x7cff,
+                0x9489, 0x8500, 0xb79b, 0xa612, 0xd2ad, 0xc324, 0xf1bf, 0xe036,
+                0x18c1, 0x0948, 0x3bd3, 0x2a5a, 0x5ee5, 0x4f6c, 0x7df7, 0x6c7e,
+                0xa50a, 0xb483, 0x8618, 0x9791, 0xe32e, 0xf2a7, 0xc03c, 0xd1b5,
+                0x2942, 0x38cb, 0x0a50, 0x1bd9, 0x6f66, 0x7eef, 0x4c74, 0x5dfd,
+                0xb58b, 0xa402, 0x9699, 0x8710, 0xf3af, 0xe226, 0xd0bd, 0xc134,
+                0x39c3, 0x284a, 0x1ad1, 0x0b58, 0x7fe7, 0x6e6e, 0x5cf5, 0x4d7c,
+                0xc60c, 0xd785, 0xe51e, 0xf497, 0x8028, 0x91a1, 0xa33a, 0xb2b3,
+                0x4a44, 0x5bcd, 0x6956, 0x78df, 0x0c60, 0x1de9, 0x2f72, 0x3efb,
+                0xd68d, 0xc704, 0xf59f, 0xe416, 0x90a9, 0x8120, 0xb3bb, 0xa232,
+                0x5ac5, 0x4b4c, 0x79d7, 0x685e, 0x1ce1, 0x0d68, 0x3ff3, 0x2e7a,
+                0xe70e, 0xf687, 0xc41c, 0xd595, 0xa12a, 0xb0a3, 0x8238, 0x93b1,
+                0x6b46, 0x7acf, 0x4854, 0x59dd, 0x2d62, 0x3ceb, 0x0e70, 0x1ff9,
+                0xf78f, 0xe606, 0xd49d, 0xc514, 0xb1ab, 0xa022, 0x92b9, 0x8330,
+                0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78,
+        };
 
-        int i;
-        int crc_value = 0;
-        for (int len = 0; len < bytes.length; len++) {
-            for (i = 0x80; i != 0; i >>= 1) {
-                if ((crc_value & 0x8000) != 0) {
-                    crc_value = (crc_value << 1) ^ 0x8005;
-                } else {
-                    crc_value = crc_value << 1;
-                }
-                if ((bytes[len] & i) != 0) {
-                    crc_value ^= 0x8005;
+        private byte[] crc8_table = {
+                (byte)0x00, (byte)0x07, (byte)0x0e, (byte)0x09, (byte)0x1c, (byte)0x1b, (byte)0x12, (byte)0x15,
+                (byte)0x38, (byte)0x3f, (byte)0x36, (byte)0x31, (byte)0x24, (byte)0x23, (byte)0x2a, (byte)0x2d,
+                (byte)0x70, (byte)0x77, (byte)0x7e, (byte)0x79, (byte)0x6c, (byte)0x6b, (byte)0x62, (byte)0x65,
+                (byte)0x48, (byte)0x4f, (byte)0x46, (byte)0x41, (byte)0x54, (byte)0x53, (byte)0x5a, (byte)0x5d,
+                (byte)0xe0, (byte)0xe7, (byte)0xee, (byte)0xe9, (byte)0xfc, (byte)0xfb, (byte)0xf2, (byte)0xf5,
+                (byte)0xd8, (byte)0xdf, (byte)0xd6, (byte)0xd1, (byte)0xc4, (byte)0xc3, (byte)0xca, (byte)0xcd,
+                (byte)0x90, (byte)0x97, (byte)0x9e, (byte)0x99, (byte)0x8c, (byte)0x8b, (byte)0x82, (byte)0x85,
+                (byte)0xa8, (byte)0xaf, (byte)0xa6, (byte)0xa1, (byte)0xb4, (byte)0xb3, (byte)0xba, (byte)0xbd,
+                (byte)0xc7, (byte)0xc0, (byte)0xc9, (byte)0xce, (byte)0xdb, (byte)0xdc, (byte)0xd5, (byte)0xd2,
+                (byte)0xff, (byte)0xf8, (byte)0xf1, (byte)0xf6, (byte)0xe3, (byte)0xe4, (byte)0xed, (byte)0xea,
+                (byte)0xb7, (byte)0xb0, (byte)0xb9, (byte)0xbe, (byte)0xab, (byte)0xac, (byte)0xa5, (byte)0xa2,
+                (byte)0x8f, (byte)0x88, (byte)0x81, (byte)0x86, (byte)0x93, (byte)0x94, (byte)0x9d, (byte)0x9a,
+                (byte)0x27, (byte)0x20, (byte)0x29, (byte)0x2e, (byte)0x3b, (byte)0x3c, (byte)0x35, (byte)0x32,
+                (byte)0x1f, (byte)0x18, (byte)0x11, (byte)0x16, (byte)0x03, (byte)0x04, (byte)0x0d, (byte)0x0a,
+                (byte)0x57, (byte)0x50, (byte)0x59, (byte)0x5e, (byte)0x4b, (byte)0x4c, (byte)0x45, (byte)0x42,
+                (byte)0x6f, (byte)0x68, (byte)0x61, (byte)0x66, (byte)0x73, (byte)0x74, (byte)0x7d, (byte)0x7a,
+                (byte)0x89, (byte)0x8e, (byte)0x87, (byte)0x80, (byte)0x95, (byte)0x92, (byte)0x9b, (byte)0x9c,
+                (byte)0xb1, (byte)0xb6, (byte)0xbf, (byte)0xb8, (byte)0xad, (byte)0xaa, (byte)0xa3, (byte)0xa4,
+                (byte)0xf9, (byte)0xfe, (byte)0xf7, (byte)0xf0, (byte)0xe5, (byte)0xe2, (byte)0xeb, (byte)0xec,
+                (byte)0xc1, (byte)0xc6, (byte)0xcf, (byte)0xc8, (byte)0xdd, (byte)0xda, (byte)0xd3, (byte)0xd4,
+                (byte)0x69, (byte)0x6e, (byte)0x67, (byte)0x60, (byte)0x75, (byte)0x72, (byte)0x7b, (byte)0x7c,
+                (byte)0x51, (byte)0x56, (byte)0x5f, (byte)0x58, (byte)0x4d, (byte)0x4a, (byte)0x43, (byte)0x44,
+                (byte)0x19, (byte)0x1e, (byte)0x17, (byte)0x10, (byte)0x05, (byte)0x02, (byte)0x0b, (byte)0x0c,
+                (byte)0x21, (byte)0x26, (byte)0x2f, (byte)0x28, (byte)0x3d, (byte)0x3a, (byte)0x33, (byte)0x34,
+                (byte)0x4e, (byte)0x49, (byte)0x40, (byte)0x47, (byte)0x52, (byte)0x55, (byte)0x5c, (byte)0x5b,
+                (byte)0x76, (byte)0x71, (byte)0x78, (byte)0x7f, (byte)0x6a, (byte)0x6d, (byte)0x64, (byte)0x63,
+                (byte)0x3e, (byte)0x39, (byte)0x30, (byte)0x37, (byte)0x22, (byte)0x25, (byte)0x2c, (byte)0x2b,
+                (byte)0x06, (byte)0x01, (byte)0x08, (byte)0x0f, (byte)0x1a, (byte)0x1d, (byte)0x14, (byte)0x13,
+                (byte)0xae, (byte)0xa9, (byte)0xa0, (byte)0xa7, (byte)0xb2, (byte)0xb5, (byte)0xbc, (byte)0xbb,
+                (byte)0x96, (byte)0x91, (byte)0x98, (byte)0x9f, (byte)0x8a, (byte)0x8d, (byte)0x84, (byte)0x83,
+                (byte)0xde, (byte)0xd9, (byte)0xd0, (byte)0xd7, (byte)0xc2, (byte)0xc5, (byte)0xcc, (byte)0xcb,
+                (byte)0xe6, (byte)0xe1, (byte)0xe8, (byte)0xef, (byte)0xfa, (byte)0xfd, (byte)0xf4, (byte)0xf3
+        };
+
+        public String SDLC_(byte[] data){
+            int crc = 0xFFFF;
+            int polynomial = 0x1021;
+
+            for (byte b : data) {
+                for (int i = 0; i < 8; i++) {
+                    boolean bit = ((b   >> (7-i) & 1) == 1);
+                    boolean c15 = ((crc >> 15    & 1) == 1);
+                    crc <<= 1;
+                    if (c15 ^ bit) crc ^= polynomial;
                 }
             }
+            crc &= 0xffff;
+            return String.format("%16s", Integer.toBinaryString(crc)).replaceAll(" ", "0");
         }
-        return Integer.toHexString(crc_value);
-    }
-}
 
+        public String SDLC_reverse(byte[] data){
+            int polynom   = 0x8408;
+
+            short[] table = new short[256];
+            for (int x = 0; x < 256; x++) {
+                int w = x;
+                for (int i = 0; i < 8; i++) {
+                    if ((w & 1) != 0) {
+                        w = (w >> 1) ^ polynom; }
+                    else {
+                        w = w >> 1; }}
+                table[x] = (short)w; }
+
+            int crc = 0xFFFF;
+            for (int p = 0; p < data.length; p++) {
+                crc = (crc >> 8) ^ (table [(crc & 0xFF) ^ (data[p] & 0xFF)] & 0xFFFF); }
+
+            return String.format("%16s", Integer.toBinaryString(crc)).replaceAll(" ", "0");
+        }
+
+        public String CRC_ATM(byte[] data){
+            byte crc8 = 0;
+            int i=0;
+            int len=data.length;
+            while(len-- != 0) {
+                crc8 = crc8_table[(crc8 ^ data[i]) & 0xFF ];
+                i++;
+            }
+            return  String.format("%8s", Long.toBinaryString(crc8&0xFFL)).replaceAll(" ", "0");
+        }
+
+        public  String  CRC_ITU(byte[] data){
+            int fcs = 0xffff;
+            int nLength = data.length;
+            int i=0;
+            while(nLength>0){
+                fcs = (fcs>>8)^crcs[(fcs^data[i]) & 0x00ff];
+                nLength -- ;
+                i++;
+            }
+            int res= fcs ^= 0xFFFF;
+
+            return String.format("%16s", Integer.toBinaryString(res)).replaceAll(" ", "0");
+        }
+
+        public String CRC16_(byte[] source){
+            int wCRCin = 0xFFFF;
+            int wCPoly = 0xA001;
+            for (int i = 0; i < source.length; i++) {
+                wCRCin ^= ((int) source[i] & 0x00FF);
+                for (int j = 0; j < 8; j++) {
+                    if ((wCRCin & 0x0001) != 0) {
+                        wCRCin >>= 1;
+                        wCRCin ^= wCPoly;
+                    } else {
+                        wCRCin >>= 1;
+                    }
+                }
+            }
+            int res = wCRCin ^= 0xFFFF;
+
+            return String.format("%16s", Integer.toBinaryString(res)).replaceAll(" ", "0");
+        }
+
+        public String CRC16_reversed(byte[] source){
+            int wCRCin = 0xFFFF;
+            int wCPoly = 0x8005;
+            for (int i = 0; i < source.length; i++) {
+                wCRCin ^= ((int) source[i] & 0x00FF);
+                for (int j = 0; j < 8; j++) {
+                    if ((wCRCin & 0x0001) != 0) {
+                        wCRCin >>= 1;
+                        wCRCin ^= wCPoly;
+                    } else {
+                        wCRCin >>= 1;
+                    }
+                }
+            }
+            int res = wCRCin ^= 0xFFFF;
+            return String.format("%16s", Integer.toBinaryString(res)).replaceAll(" ", "0");
+        }
+
+        public String CRC12_(byte[] source){
+
+            int wCRCin = 0xFFF;
+            int wCPoly = 0xF01;
+            for (int i = 0; i < source.length; i++) {
+                wCRCin ^= ((int) source[i] & 0x0FF);
+                for (int j = 0; j < 8; j++) {
+                    if ((wCRCin & 0x001) != 0) {
+                        wCRCin >>= 1;
+                        wCRCin ^= wCPoly;
+                    } else {
+                        wCRCin >>= 1;
+                    }
+                }
+            }
+            int res = wCRCin ^= 0xFFF;
+            return String.format("%12s", Integer.toBinaryString(res)).replaceAll(" ", "0");
+        }
+
+        public String CRC32_(byte[] source){
+
+            Checksum checksum = new CRC32();
+            checksum.update(source, 0, source.length);
+            long checksumValue = checksum.getValue();
+
+            System.out.println(Long.toBinaryString(checksumValue));
+            return String.format("%32s", Long.toBinaryString(checksumValue)).replaceAll(" ", "0");
+        }
+    }
 
