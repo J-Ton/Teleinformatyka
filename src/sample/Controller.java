@@ -34,6 +34,9 @@ public class Controller {
     private TextArea input_data1;
 
     @FXML
+    private TextArea input_data2;
+
+    @FXML
     private TextArea input_data3;
 
     @FXML
@@ -103,7 +106,7 @@ public class Controller {
                 String text = text_do_wyslania.getText();
                 String bin_data = charToBinary(text);
                 input_data1.setText(bin_data);
-                //input_data2.setText(bin_data);
+                input_data2.setText(bin_data);
                 input_data3.setText(bin_data);
                 code = Pair.encodeParity(bin_data);
                 coded_data1.setText(code);
