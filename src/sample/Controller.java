@@ -88,6 +88,21 @@ public class Controller {
     private Button about;
 
     @FXML
+    private TextField output2;
+
+    @FXML
+    private TextArea bad_data2;
+
+    @FXML
+    private TextArea coded_data2;
+
+    @FXML
+    private Tab tab_hamming;
+
+    @FXML
+    private TabPane tabs;
+
+    @FXML
     void initialize() {
 
         Pairity Pair = new Pairity();
@@ -127,11 +142,16 @@ public class Controller {
                 String bin_data = charToBinary(text);
 
                 input_data1.setText(bin_data);
+                input_data2.setText(bin_data);
+                input_data3.setText(bin_data);
                 code = Pair.encodeParity(bin_data);
                 coded_data1.setText(code);
                 bad = zakloc(code,bity_do_przeklamania.getText());
                 bad_data1.setText(bad);
                 output1.setText(Pair.decodeParity(bad));
+                output2.setText(Pair.decodeParity(bad));
+                bad_data2.setText(bad);
+                coded_data2.setText(Pair.encodeHamming(bad));
                 decode1.setText(Pair.decodePair(bad));
 
                 input_data2.setText(bin_data);
@@ -206,6 +226,21 @@ public class Controller {
                         sprawdz(bad,8);
                         decode3.setText(decode(bad, 8));
                         break;
+                }
+
+            }
+        });
+
+        tabs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+                Tab currentTab = (Tab) observable.getValue();
+                if (currentTab.getId().equals("tab_hamming")){
+                    bity_do_przeklamania.setText("1 ");
+                    bity_do_przeklamania.setEditable(false);
+                }
+                else{
+                    bity_do_przeklamania.setEditable(true);
                 }
 
             }
@@ -286,6 +321,7 @@ public class Controller {
     }
 
     public String zakloc(String input, String bits){
+        bits = bits.trim();
         char[] dane = input.toCharArray();
         if(bits.length()>0){
             int bity = Integer.parseInt(bits);
