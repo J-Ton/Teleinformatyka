@@ -116,7 +116,6 @@ public class Controller {
             @Override
             public void handle(ActionEvent event) {
                text_do_wyslania.setText(getRandomString());
-
             }
         });
 
@@ -212,6 +211,14 @@ public class Controller {
             }
         });
 
+
+        check1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                output1.setText(Pair.decodeParity(bad_data1.getText()));
+                decode1.setText(Pair.decodePair(bad_data1.getText()));
+            }
+        });
 
 
         check3.setOnAction(new EventHandler<ActionEvent>() {
