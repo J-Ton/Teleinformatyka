@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -88,15 +90,6 @@ public class Controller {
     private Button about;
 
     @FXML
-    private TextField output2;
-
-    @FXML
-    private TextArea bad_data2;
-
-    @FXML
-    private TextArea coded_data2;
-
-    @FXML
     private Tab tab_hamming;
 
     @FXML
@@ -154,11 +147,6 @@ public class Controller {
                 coded_data2.setText(Pair.encodeHamming(bad));
                 decode1.setText(Pair.decodePair(bad));
 
-                input_data2.setText(bin_data);
-                coded_data2.setText(Pair.encodeHamming(bad));
-                bad_data2.setText(bad);
-                output2.setText(Pair.decodeParity(bad));
-                decode2.setText(Pair.decodePair(bad));
 
                 input_data3.setText(bin_data);
                 switch(comboBox_metoda.getValue()){
@@ -232,6 +220,7 @@ public class Controller {
         });
 
         tabs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 Tab currentTab = (Tab) observable.getValue();
