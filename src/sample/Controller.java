@@ -1,16 +1,25 @@
 package sample;
 
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class Controller {
 
     @FXML
     private TextField text_do_wyslania;
+
+    @FXML
+    private Button generate;
 
     @FXML
     private TextField bity_do_przeklamania;
@@ -19,16 +28,10 @@ public class Controller {
     private Button button_sent_text;
 
     @FXML
-    private Button encode_pairity;
-
-    @FXML
-    private Button check3;
-
-    @FXML
     private ComboBox<String> comboBox_metoda;
 
     @FXML
-    private TextField input_data1;
+    private TextArea input_data1;
 
     @FXML
     private TextArea input_data3;
@@ -40,10 +43,25 @@ public class Controller {
     private TextArea bad_data3;
 
     @FXML
+    private Button check3;
+
+    @FXML
     private TextField output3;
 
     @FXML
-    private TextField coded_par;
+    private TextArea coded_data1;
+
+    @FXML
+    private TextArea bad_data1;
+
+    @FXML
+    private Button check1;
+
+    @FXML
+    private Button about;
+
+    @FXML
+    private TextField output1;
 
     @FXML
     void initialize() {
@@ -51,14 +69,47 @@ public class Controller {
         Pairity Pair = new Pairity();
         CrcCalc Crc = new CrcCalc();
 
+        about.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("NewWindow.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                    scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+                    Stage stage = new Stage();
+                    stage.setTitle("About");
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    Logger logger = Logger.getLogger(getClass().getName());
+                    logger.log(Level.SEVERE, "Failed to create new Window.", e);
+                }
+            }
+        });
+
+        generate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               text_do_wyslania.setText(getRandomString());
+
+            }
+        });
+
         button_sent_text.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                String code, bad;
                 String text = text_do_wyslania.getText();
                 String bin_data = charToBinary(text);
-                //input_data1.setText(bin_data);
+                input_data1.setText(bin_data);
+                //input_data2.setText(bin_data);
                 input_data3.setText(bin_data);
-                String code, bad;
+                code = Pair.encodeParity(bin_data);
+                coded_data1.setText(code);
+                bad = zakloc(code,bity_do_przeklamania.getText());
+                bad_data1.setText(bad);
+                output1.setText(Pair.decodeParity(bad));
                 switch(comboBox_metoda.getValue()){
                     case "CRC12":
                         code = Crc.CRC12_(binaryToChar(bin_data).getBytes());
@@ -121,13 +172,7 @@ public class Controller {
             }
         });
 
-        encode_pairity.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            String input = input_data1.getText();
-            coded_par.setText(Pair.encodeParity(input));
-            }
-        });
+
 
         check3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -210,97 +255,85 @@ public class Controller {
         return String.valueOf(dane);
     }
 
-    public void sprawdz(String input_str, int type){
+    public void sprawdz(String input_str, int type) {
         CrcCalc Crc = new CrcCalc();
-        int n  = input_str.length();
+        int n = input_str.length();
         String code, new_code, data;
-        switch (type){
+        switch (type) {
             case 1:
                 code = input_str.substring(0, 12);
-                System.out.println(code);
-                data = input_str.substring(12,n);
+                data = input_str.substring(12, n);
                 new_code = Crc.CRC12_(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 2:
                 code = input_str.substring(0, 16);
-                System.out.println(code);
-                data = input_str.substring(16,n);
+                data = input_str.substring(16, n);
                 new_code = Crc.CRC16_(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
-                    else output3.setText("Dane zostaly zaklocone!");
+                else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 3:
                 code = input_str.substring(0, 16);
-                System.out.println(code);
-                data = input_str.substring(16,n);
+                data = input_str.substring(16, n);
                 new_code = Crc.CRC16_reversed(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 4:
                 code = input_str.substring(0, 32);
-                System.out.println(code);
-                data = input_str.substring(32,n);
+                data = input_str.substring(32, n);
                 new_code = Crc.CRC32_(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 5:
                 code = input_str.substring(0, 16);
-                System.out.println(code);
-                data = input_str.substring(16,n);
+                data = input_str.substring(16, n);
                 new_code = Crc.SDLC_(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 6:
                 code = input_str.substring(0, 16);
-                System.out.println(code);
-                data = input_str.substring(16,n);
+                data = input_str.substring(16, n);
                 new_code = Crc.SDLC_reverse(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 7:
                 code = input_str.substring(0, 16);
-                System.out.println(code);
-                data = input_str.substring(16,n);
+                data = input_str.substring(16, n);
                 new_code = Crc.CRC_ITU(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
             case 8:
                 code = input_str.substring(0, 8);
-                System.out.println(code);
-                data = input_str.substring(8,n);
+                data = input_str.substring(8, n);
                 new_code = Crc.CRC_ATM(binaryToChar(data).getBytes());
-                System.out.println(new_code);
-                System.out.println(code.equals(new_code));
                 if (code.equals(new_code)) output3.setText("Dane są poprawne");
                 else output3.setText("Dane zostaly zaklocone!");
                 break;
         }
-
-        //output3.setText("Dane zostaly zaklocone!");
-
-        //output3.setText("Dane poprawne");
     }
+
+        static String getRandomString(){
+        int n = (int)(15*Math.random());
+            String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    + "0123456789"
+                    + "abcdefghijklmnopqrstuvxyz";
+            StringBuilder sb = new StringBuilder(n);
+
+            for (int i = 0; i < n; i++) {
+
+                int index = (int)(AlphaNumericString.length() * Math.random());
+                sb.append(AlphaNumericString.charAt(index));
+            }
+            return sb.toString();
+        }
+
 
 }
 
