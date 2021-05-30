@@ -37,6 +37,7 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
+                        <TextField fx:id="input_data1" layoutX="179.0" layoutY="35.0" />
                         <Label layoutX="33.0" layoutY="162.0" text="Dane zakodowane:">
                            <font>
                               <Font name="System Bold" size="14.0" />

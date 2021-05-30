@@ -56,7 +56,7 @@ public class Controller {
             public void handle(ActionEvent event) {
                 String text = text_do_wyslania.getText();
                 String bin_data = charToBinary(text);
-                //input_data1.setText(bin_data);
+                input_data1.setText(bin_data);
                 input_data3.setText(bin_data);
                 String code, bad;
                 switch(comboBox_metoda.getValue()){
@@ -125,6 +125,7 @@ public class Controller {
             @Override
             public void handle(ActionEvent event) {
             String input = input_data1.getText();
+            System.out.println("input: "+input);
             coded_par.setText(Pair.encodeParity(input));
             }
         });
