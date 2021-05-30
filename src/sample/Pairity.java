@@ -1,5 +1,7 @@
 package sample;
 
+import java.lang.reflect.Array;
+
 public class Pairity {
 
     public String encodeParity(String input) {
@@ -51,6 +53,19 @@ public class Pairity {
             else return "Przeklamano " + String.valueOf(errors) + " bajtów";
         }
         return"";
+    }
+
+    public String decodePair (String input){
+        String str = "";
+        int n = input.length();
+        int bytes = n/9;
+        for (int i = 0; i < bytes; i++) {
+
+            int a = Integer.parseInt(input.substring(9*i+1,(i+1)*9),2);
+            str += (char)(a);
+        }
+
+        return str;
     }
 
     /* kodowanie metodą Hamminga */

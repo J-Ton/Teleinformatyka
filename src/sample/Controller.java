@@ -8,9 +8,7 @@ import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -44,28 +42,22 @@ public class Controller {
     private TextArea input_data3;
 
     @FXML
-    private TextArea coded_data3;
-
-    @FXML
-    private TextArea bad_data3;
-
-    @FXML
-    private Button check3;
-
-    @FXML
-    private TextField output3;
-
-    @FXML
     private TextArea coded_data1;
+
+    @FXML
+    private TextArea coded_data2;
+
+    @FXML
+    private TextArea coded_data3;
 
     @FXML
     private TextArea bad_data1;
 
     @FXML
-    private Button check1;
+    private TextArea bad_data2;
 
     @FXML
-    private Button about;
+    private TextArea bad_data3;
 
     @FXML
     private TextField output1;
@@ -74,10 +66,28 @@ public class Controller {
     private TextField output2;
 
     @FXML
-    private TextArea bad_data2;
+    private TextField output3;
 
     @FXML
-    private TextArea coded_data2;
+    private TextArea decode1;
+
+    @FXML
+    private TextArea decode2;
+
+    @FXML
+    private TextArea decode3;
+
+    @FXML
+    private Button check1;
+
+    @FXML
+    private Button check2;
+
+    @FXML
+    private Button check3;
+
+    @FXML
+    private Button about;
 
     @FXML
     private Tab tab_hamming;
@@ -114,7 +124,6 @@ public class Controller {
             @Override
             public void handle(ActionEvent event) {
                text_do_wyslania.setText(getRandomString());
-
             }
         });
 
@@ -124,6 +133,7 @@ public class Controller {
                 String code, bad;
                 String text = text_do_wyslania.getText();
                 String bin_data = charToBinary(text);
+
                 input_data1.setText(bin_data);
                 input_data2.setText(bin_data);
                 input_data3.setText(bin_data);
@@ -135,6 +145,10 @@ public class Controller {
                 output2.setText(Pair.decodeParity(bad));
                 bad_data2.setText(bad);
                 coded_data2.setText(Pair.encodeHamming(bad));
+                decode1.setText(Pair.decodePair(bad));
+
+
+                input_data3.setText(bin_data);
                 switch(comboBox_metoda.getValue()){
                     case "CRC12":
                         code = Crc.CRC12_(binaryToChar(bin_data).getBytes());
@@ -142,6 +156,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,1);
+                        decode3.setText(decode(bad, 12));
                         break;
                     case "CRC16":
                         code = Crc.CRC16_(binaryToChar(bin_data).getBytes());
@@ -149,6 +164,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,2);
+                        decode3.setText(decode(bad, 16));
                         break;
                     case "CRC16 REVERSE":
                         code = Crc.CRC16_reversed(binaryToChar(bin_data).getBytes());
@@ -156,6 +172,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,3);
+                        decode3.setText(decode(bad, 16));
                         break;
                     case "CRC32":
                         code = Crc.CRC32_(binaryToChar(bin_data).getBytes());
@@ -163,6 +180,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,4);
+                        decode3.setText(decode(bad, 32));
                         break;
                     case "SDLC":
                         code = Crc.SDLC_(binaryToChar(bin_data).getBytes());
@@ -170,6 +188,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,5);
+                        decode3.setText(decode(bad, 16));
                         break;
                     case "SDLC REVERSE":
                         code = Crc.SDLC_reverse(binaryToChar(bin_data).getBytes());
@@ -177,6 +196,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,6);
+                        decode3.setText(decode(bad, 16));
                         break;
                     case "CRC-ITU":
                         code = Crc.CRC_ITU(binaryToChar(bin_data).getBytes());
@@ -184,6 +204,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,7);
+                        decode3.setText(decode(bad, 16));
                         break;
                     case "AMT":
                         code = Crc.CRC_ATM(binaryToChar(bin_data).getBytes());
@@ -191,6 +212,7 @@ public class Controller {
                         bad = zakloc(coded_data3.getText(), bity_do_przeklamania.getText());
                         bad_data3.setText(bad);
                         sprawdz(bad,8);
+                        decode3.setText(decode(bad, 8));
                         break;
                 }
 
@@ -198,6 +220,7 @@ public class Controller {
         });
 
         tabs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 Tab currentTab = (Tab) observable.getValue();
@@ -212,6 +235,14 @@ public class Controller {
             }
         });
 
+
+        check1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                output1.setText(Pair.decodeParity(bad_data1.getText()));
+                decode1.setText(Pair.decodePair(bad_data1.getText()));
+            }
+        });
 
 
         check3.setOnAction(new EventHandler<ActionEvent>() {
@@ -373,6 +404,19 @@ public class Controller {
                 sb.append(AlphaNumericString.charAt(index));
             }
             return sb.toString();
+        }
+
+        public String decode (String input, int offset){
+            String str = "";
+            int n = input.length();
+            String binary = input.substring(offset, n);
+            for (int i = 0; i < binary.length()/8; i++) {
+
+                int a = Integer.parseInt(binary.substring(8*i,(i+1)*8),2);
+                str += (char)(a);
+            }
+
+            return str;
         }
 
 
