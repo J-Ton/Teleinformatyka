@@ -198,8 +198,6 @@ import java.util.zip.Checksum;
             Checksum checksum = new CRC32();
             checksum.update(source, 0, source.length);
             long checksumValue = checksum.getValue();
-
-            System.out.println(Long.toBinaryString(checksumValue));
             return String.format("%32s", Long.toBinaryString(checksumValue)).replaceAll(" ", "0");
         }
     }

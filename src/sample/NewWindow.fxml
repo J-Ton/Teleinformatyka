@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0"
-            id = "pane">
-
+<AnchorPane id="pane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="239.0" layoutY="230.0" style="-fx-background-color: white;" text="Developed by:">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="118.0" layoutY="266.0" style="-fx-background-color: white;" text="Tsyliurnyk Yevhenii, Oleksandr Tomenchuk">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="155.0" layoutY="293.0" style="-fx-background-color: white;" text="Ewa Szewczak, Bartłomiej Wieleba">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="280.0" layoutY="320.0" style="-fx-background-color: white;" text="2021">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="177.0" fitWidth="318.0" layoutX="141.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@1FA.gif" />
+            </image>
+        </ImageView>
+    </children>
 </AnchorPane>
