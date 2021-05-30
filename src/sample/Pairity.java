@@ -1,7 +1,5 @@
 package sample;
 
-import java.lang.reflect.Array;
-
 public class Pairity {
 
     public String encodeParity(String input) {
@@ -53,6 +51,58 @@ public class Pairity {
             else return "Przeklamano " + String.valueOf(errors) + " bajtów";
         }
         return"";
+    }
+
+    /* kodowanie metodą Hamminga */
+    String encodeHamming(String random_data) { // parametr - tablica INT
+        int bits_number = random_data.length();
+        int i = 0, redundancy = 0, sum = 0;
+
+        while(i < bits_number) {
+            if(Math.pow(2,redundancy) - 1 == sum)
+                redundancy++;
+            else
+                i++;
+            sum++;
+        }
+
+        Character coded_data []= new Character[sum];
+        Integer type []= new Integer[sum];
+
+        int mask = 0;
+        redundancy = 0;
+        int d = 0;
+        i = 0;
+        sum = 0;
+
+        while (i < bits_number) {
+            if (Math.pow(2,redundancy) - 1 == sum)
+                redundancy++;
+            else {
+                coded_data[sum]=random_data.charAt(i);
+                if (random_data.charAt(i)==1)
+                    mask ^= sum+1;
+                    i++;
+            }
+            sum++;
+        }
+
+        redundancy = 0;
+        for (i = 0; i < sum; i++) {
+            if (Math.pow(2,redundancy) - 1 == i) {
+                if ((mask & (1 << redundancy))==0)
+                    coded_data[i]=0;
+                else
+                    coded_data[i]=1;
+                redundancy++;
+            }
+        }
+        String data="";
+        for(i=0; i<coded_data.length; i++){
+            data +=coded_data[i];
+        }
+
+        return data;
     }
 
 }

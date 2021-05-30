@@ -5,8 +5,12 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -67,6 +71,21 @@ public class Controller {
     private TextField output1;
 
     @FXML
+    private TextField output2;
+
+    @FXML
+    private TextArea bad_data2;
+
+    @FXML
+    private TextArea coded_data2;
+
+    @FXML
+    private Tab tab_hamming;
+
+    @FXML
+    private TabPane tabs;
+
+    @FXML
     void initialize() {
 
         Pairity Pair = new Pairity();
@@ -113,6 +132,9 @@ public class Controller {
                 bad = zakloc(code,bity_do_przeklamania.getText());
                 bad_data1.setText(bad);
                 output1.setText(Pair.decodeParity(bad));
+                output2.setText(Pair.decodeParity(bad));
+                bad_data2.setText(bad);
+                coded_data2.setText(Pair.encodeHamming(bad));
                 switch(comboBox_metoda.getValue()){
                     case "CRC12":
                         code = Crc.CRC12_(binaryToChar(bin_data).getBytes());
@@ -170,6 +192,21 @@ public class Controller {
                         bad_data3.setText(bad);
                         sprawdz(bad,8);
                         break;
+                }
+
+            }
+        });
+
+        tabs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+                Tab currentTab = (Tab) observable.getValue();
+                if (currentTab.getId().equals("tab_hamming")){
+                    bity_do_przeklamania.setText("1 ");
+                    bity_do_przeklamania.setEditable(false);
+                }
+                else{
+                    bity_do_przeklamania.setEditable(true);
                 }
 
             }
@@ -242,6 +279,7 @@ public class Controller {
     }
 
     public String zakloc(String input, String bits){
+        bits = bits.trim();
         char[] dane = input.toCharArray();
         if(bits.length()>0){
             int bity = Integer.parseInt(bits);
