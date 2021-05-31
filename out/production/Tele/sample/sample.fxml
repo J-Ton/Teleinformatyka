@@ -78,76 +78,56 @@
                            <font>
                               <Font size="18.0" />
                            </font></TextArea>
-                        <TextField fx:id="output1" layoutX="194.0" layoutY="405.0" prefHeight="25.0" prefWidth="267.0">
+                        <TextField fx:id="output1" layoutX="193.0" layoutY="412.0" prefHeight="25.0" prefWidth="267.0">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font></TextField>
-                        <Button fx:id="check1" layoutX="500.0" layoutY="412.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="Sprawdź" />
-                        <Label layoutX="32.0" layoutY="486.0" text="Dane dekodowane:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="decode1" layoutX="194.0" layoutY="452.0" prefHeight="88.0" prefWidth="464.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </TextArea>
+                        <Button fx:id="check1" layoutX="500.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="Sprawdź" />
                      </children></AnchorPane>
                </content>
             </Tab>
             <Tab fx:id="tab_hamming" text="Kod Hamminga">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="701.0">
-                     <children>
-                        <Label layoutX="33.0" layoutY="144.0" text="Dane binarne:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="33.0" layoutY="240.0" text="Dane zakodowane:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="33.0" layoutY="338.0" text="Dane zaklocone:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="30.0" layoutY="414.0" text="Wynik sprawdzenia:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="input_data2" editable="false" layoutX="194.0" layoutY="110.0" prefHeight="88.0" prefWidth="464.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font></TextArea>
-                        <TextArea fx:id="coded_data2" editable="false" layoutX="194.0" layoutY="206.0" prefHeight="88.0" prefWidth="464.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font></TextArea>
-                        <TextArea fx:id="bad_data2" layoutX="194.0" layoutY="304.0" prefHeight="88.0" prefWidth="464.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font></TextArea>
-                        <TextField fx:id="output2" layoutX="194.0" layoutY="405.0" prefHeight="25.0" prefWidth="267.0">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font></TextField>
-                        <Button fx:id="check2" layoutX="500.0" layoutY="412.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="Sprawdź" />
-                        <Label layoutX="32.0" layoutY="486.0" text="Dane dekodowane:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="decode2" layoutX="194.0" layoutY="452.0" prefHeight="88.0" prefWidth="464.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </TextArea>
-                     </children>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="701.0" >
+                  <children>
+                     <Label layoutX="33.0" layoutY="144.0" text="Dane binarne:">
+                        <font>
+                           <Font name="System Bold" size="14.0" />
+                        </font>
+                     </Label>
+                     <Label layoutX="33.0" layoutY="240.0" text="Dane zakodowane:">
+                        <font>
+                           <Font name="System Bold" size="14.0" />
+                        </font>
+                     </Label>
+                     <Label layoutX="33.0" layoutY="338.0" text="Dane zaklocone:">
+                        <font>
+                           <Font name="System Bold" size="14.0" />
+                        </font>
+                     </Label>
+                     <Label layoutX="30.0" layoutY="414.0" text="Wynik sprawdzenia:">
+                        <font>
+                           <Font name="System Bold" size="14.0" />
+                        </font>
+                     </Label>
+                     <TextArea fx:id="input_data2" editable="false" layoutX="194.0" layoutY="110.0" prefHeight="88.0" prefWidth="464.0">
+                        <font>
+                           <Font size="18.0" />
+                        </font></TextArea>
+                     <TextArea fx:id="coded_data2" editable="false" layoutX="194.0" layoutY="206.0" prefHeight="88.0" prefWidth="464.0">
+                        <font>
+                           <Font size="18.0" />
+                        </font></TextArea>
+                     <TextArea fx:id="bad_data2" layoutX="194.0" layoutY="304.0" prefHeight="88.0" prefWidth="464.0">
+                        <font>
+                           <Font size="18.0" />
+                        </font></TextArea>
+                     <TextField fx:id="output2" layoutX="193.0" layoutY="412.0" prefHeight="25.0" prefWidth="267.0">
+                        <font>
+                           <Font name="System Bold" size="18.0" />
+                        </font></TextField>
+                     <Button fx:id="check2" layoutX="500.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="Sprawdź" />
+                  </children>
                   </AnchorPane>
                </content>
             </Tab>
@@ -188,21 +168,11 @@
                            <font>
                               <Font size="18.0" />
                            </font></TextArea>
-                        <TextField fx:id="output3" layoutX="194.0" layoutY="405.0" prefHeight="25.0" prefWidth="267.0">
+                        <TextField fx:id="output3" layoutX="193.0" layoutY="412.0" prefHeight="25.0" prefWidth="267.0">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font></TextField>
-                        <Button fx:id="check3" layoutX="500.0" layoutY="412.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="Sprawdź" />
-                        <Label layoutX="32.0" layoutY="486.0" text="Dane dekodowane:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="decode3" layoutX="194.0" layoutY="452.0" prefHeight="88.0" prefWidth="464.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </TextArea>
+                        <Button fx:id="check3" layoutX="497.0" layoutY="422.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="Sprawdź" />
                      </children>
                   </AnchorPane>
                </content>

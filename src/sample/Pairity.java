@@ -97,7 +97,7 @@ public class Pairity {
                 coded_data[sum]=random_data.charAt(i);
                 if (random_data.charAt(i)==1)
                     mask ^= sum+1;
-                i++;
+                    i++;
             }
             sum++;
         }

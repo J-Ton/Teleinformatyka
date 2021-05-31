@@ -40,7 +40,7 @@
                </font>
             </Button>
          </children></AnchorPane>
-      <TabPane layoutX="300.0" prefHeight="585.0" prefWidth="701.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabs" layoutX="300.0" prefHeight="585.0" prefWidth="701.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
             <Tab fx:id="tab_controla" text="Controla parzystości">
                <content>
