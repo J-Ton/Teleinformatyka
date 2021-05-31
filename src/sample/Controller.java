@@ -135,11 +135,11 @@ public class Controller {
                 decode1.setText(Pair.decodePair(bad));
 
                 input_data2.setText(bin_data);
-                coded_data2.setText(Pair.encodeHamming(bad));
+                String hammingCode=Pair.encodeHamming(bin_data);
+                coded_data2.setText(hammingCode);
                 bad_data2.setText(bad);
                 output2.setText(Pair.decodeParity(bad));
                 decode2.setText(Pair.decodePair(bad));
-
                 input_data3.setText(bin_data);
                 switch(comboBox_metoda.getValue()){
                     case "CRC12":

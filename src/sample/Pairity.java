@@ -120,4 +120,102 @@ public class Pairity {
         return data;
     }
 
-}
+    /* korekcja */
+    String fixHamming(String coded_data) {
+        int n = coded_data.length();
+        Character decoded_data[] = new Character[n];
+        int d = 0;
+        int redundancy = 0;
+        int errors = 0;
+
+        for(int i=0; i<coded_data.length(); i++){
+            decoded_data[i] = coded_data.charAt(i); // oddziel dwa źródła danych
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (Math.pow(2, redundancy) - 1 != i)
+                d++;
+            else
+                redundancy++;
+        }
+
+        Character type[] = new Character[n];
+
+        int mask = 0;
+        d = 0;
+        redundancy = 0;
+
+        for (int i = 0; i < n; i++) {
+            // kontrola poprawności
+            if (decoded_data[i] == 1)
+                mask ^= i + 1;
+
+            // określanie typu bitów
+            if (Math.pow(2, redundancy) - 1 != i) {
+                d++;
+                type[i] = 0;
+            } else {
+                type[i] = 3;
+                redundancy++;
+            }
+        }
+
+        if (mask != 0)  // wystąpił błąd
+        {
+            errors++;
+            int nr = mask - 1;
+
+            if (nr < decoded_data.length) {
+                if (type[nr] == 0)
+                    type[nr] = 1;    // korekcja
+                else if (type[nr] == 3)
+                    type[nr] = 4;    // korekcja
+
+                if (decoded_data[nr] == 1)
+                    decoded_data[nr] = 0;
+                else
+                    decoded_data[nr] = 1;
+            }
+        }
+        String data="";
+        for(int i=0; i<n; i++){
+            data +=decoded_data[i];
+        }
+        return data;
+    }
+
+    /* dekodowanie */
+    String decodeHamming(String coded_data) {
+        int n = coded_data.length();
+        int d = 0;
+        int redundancy = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (Math.pow(2,redundancy) - 1 != i)
+                d++;
+            else
+                redundancy++;
+        }
+
+        Character dane[] = new Character[d];
+        d = 0;
+        redundancy = 0;
+
+        for (int i=0; i < n; i++)
+        {
+            if (Math.pow(2,redundancy) - 1 != i)
+            {
+                dane[d] = coded_data.charAt(i);
+                d++;
+            }
+            else redundancy++;
+        }
+        String data="";
+        for(int i=0; i<d; i++){
+            data +=dane[i];
+        }
+        return data;
+    }
+
+    }
