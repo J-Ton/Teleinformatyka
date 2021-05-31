@@ -92,6 +92,7 @@ public class Controller {
 
         Pairity Pair = new Pairity();
         CrcCalc Crc = new CrcCalc();
+        Hamming Hamm = new Hamming();
 
         about.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -135,10 +136,12 @@ public class Controller {
                 decode1.setText(Pair.decodePair(bad));
 
                 input_data2.setText(bin_data);
-                coded_data2.setText(Pair.encodeHamming(bad));
+                code = Hamm.encodeHamming(bin_data);
+                coded_data2.setText(code);
+                bad = zakloc(code,bity_do_przeklamania.getText());
                 bad_data2.setText(bad);
-                output2.setText(Pair.decodeParity(bad));
-                decode2.setText(Pair.decodePair(bad));
+                output2.setText(Hamm.receive(bad));
+                decode2.setText(binaryToChar(Hamm.decode(bad)));
 
                 input_data3.setText(bin_data);
                 switch(comboBox_metoda.getValue()){
@@ -217,6 +220,14 @@ public class Controller {
             public void handle(ActionEvent event) {
                 output1.setText(Pair.decodeParity(bad_data1.getText()));
                 decode1.setText(Pair.decodePair(bad_data1.getText()));
+            }
+        });
+
+        check2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                output2.setText(Hamm.receive(bad_data2.getText()));
+                decode2.setText(binaryToChar(Hamm.decode(bad_data2.getText())));
             }
         });
 
